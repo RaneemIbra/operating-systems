@@ -219,9 +219,14 @@ void remove_value(list* list, int value)
 //a function that will print the list one node at a time according to the node function that was declared and implemented above
 void print_list(list* list)
 {
-  //check if the list is null or empty, if yes then we terminate
-  if(!list || !list->start){
+  //check if the list is null, if yes then we terminate
+  if(!list){
     return;
+  }
+
+  //check if the list is empty, if yes then we print an empty line
+  if(!list->start){
+    printf("\n");
   }
 
   //just like before we will need the pointers to iterate the list
