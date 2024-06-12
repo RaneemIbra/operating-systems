@@ -54,11 +54,11 @@ void delete_list(list* list)
   node* head = list->start;
   node* iterator;
 
+  //lock the node where the first pointer is pointing at so that other threads can't access it during the run of the current thread
+  pthread_mutex_lock(&head->lock);
+
   //start iterating the list
   while (head) {
-
-    //lock the node where the first pointer is pointing at so that other threads can't access it during the run of the current thread
-    pthread_mutex_lock(&head->lock);
 
     //move the iterator to the next node
     iterator = head->next;
@@ -80,6 +80,7 @@ void delete_list(list* list)
   }
 
   //after we freed every node, now it is time to free the list
+  list->start = NULL;
   free(list);
 }
 
@@ -219,14 +220,10 @@ void remove_value(list* list, int value)
 //a function that will print the list one node at a time according to the node function that was declared and implemented above
 void print_list(list* list)
 {
-  //check if the list is null, if yes then we terminate
-  if(!list){
-    return;
-  }
-
-  //check if the list is empty, if yes then we print an empty line
-  if(!list->start){
+  //check if the list is null or empty, if yes then we terminate
+  if(!list || !list->start){
     printf("\n");
+    return;
   }
 
   //just like before we will need the pointers to iterate the list
